@@ -1,0 +1,5 @@
+step 1 download:        https://github.com/nigels-com/glew/releases/download/glew-2.2.0/glew-2.2.0.zip
+step 2 extract the zip file inside GLEW folder
+step 3 inside build folder run: cmake ./cmake -G "write your generator here" -DCMAKE_POLICY_VERSION_MINIMUM="3.5"
+step 4 run make inside build
+step 5 in the root folder of the project in the CMakeLists.txt set the GLEW_ROOT variable to the path of the root GLEW folder
