@@ -39,7 +39,7 @@ void input(GLFWwindow* window, int key, int scancode, int action, int mods);
 void CheckFile(std::string (*SelectFile)(), std::string TypeExtension);
 void ReadFile();
 
-void NextWord();
+int NextWord();
 void JumpForward(int words);
 void JumpBackwards(int words);
 
@@ -53,8 +53,12 @@ void ShowConsole()
     ::ShowWindow(::GetConsoleWindow(), SW_SHOW);
 }
 
+void ResumeSession();
+void NewSession();
+void Exit(bool goodStart, int lastIndex);
+
 int main(){
-	HideConsole();
+	ShowConsole();
 	
     print("TextReader start point\n");
 
@@ -74,6 +78,16 @@ int main(){
     //float deltaTime= 0;
     //float currTime = 0, prevTime = glfwGetTime();
 
+    char inputCode = 0;
+    println("Type Y to resume last session, type N to enter a new session: ");
+    std::cin>>inputCode;
+    if(inputCode == 'Y' || inputCode == 'y'){
+        println("Resuming previous session");
+    }
+    else if(inputCode == 'N' || inputCode == 'n'){
+        println("Entering a new session");
+    }
+
     Text::InitClass();
     Text text(&shader);
 
@@ -91,6 +105,7 @@ int main(){
         NextWord();
     }
 
+    int lastWordStartIndex = 0;
     std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
 
     //std::cout << "Time difference = " << std::chrono::duration_cast<std::chrono::milliseconds>(end - begin).count() << "[µs]" << std::endl;
@@ -114,7 +129,7 @@ int main(){
 
             if(std::chrono::duration_cast<std::chrono::milliseconds>(elapsed - begin).count() > 60000/WPM){
                 begin = std::chrono::steady_clock::now();
-                NextWord();
+                lastWordStartIndex = NextWord();
                 println(charIndex);
             }
         }
@@ -129,8 +144,37 @@ int main(){
 
     glfwTerminate();
 
+    Exit(true, lastWordStartIndex);
+
     return 0;
 }
+void Exit(bool goodStart, int lastIndex){
+    println("EXIT FUNC");
+    if(goodStart == true){
+        println("goodStart true");
+        std::ofstream data;
+        data.open("session.txt");
+        
+        if(data.is_open()){
+            println("Opened session.txt");
+
+            data << filePath;
+            data << 
+            data << lastIndex;
+        }
+        else{
+            println("Failed opening session.txt");
+        }
+        data.close();
+    }
+}
+void NewSession(){
+
+}
+void ResumeSession(){
+
+}
+
 void CheckFile(std::string (*SelectFileDialog)(), std::string TypeExtension){
     fileSelection = true;
 
@@ -199,7 +243,8 @@ void ReadFile(){
     charIndex = 0;
 }
 
-void NextWord(){
+int NextWord(){
+    int wordStartIndex = charIndex;
     currentWord.clear();
     //std::cout<<"Text position: " << charIndex << std::endl;
     for(int i=charIndex;i<text.size();i++){
@@ -209,6 +254,8 @@ void NextWord(){
         }
         currentWord.push_back(text[i]);
     }
+
+    return wordStartIndex;
     //std::cout<<"Current word is: " << currentWord << std::endl;
 }
 void JumpForward(int words){
