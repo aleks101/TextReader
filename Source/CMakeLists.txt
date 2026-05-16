@@ -10,9 +10,8 @@ set_target_properties(GLEW::GLEW PROPERTIES
 target_compile_definitions(TextReader PRIVATE GLEW_STATIC STB_IMAGE_IMPLEMENTATION)
 
 target_link_libraries(TextReader PRIVATE
-    zlib
+    zlib_static_example64
     GLEW::GLEW
-    podofo_shared
     glfw
     opengl32
     freetype

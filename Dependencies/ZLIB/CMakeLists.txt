@@ -7,7 +7,3 @@ FetchContent_Declare(
 )
 
 FetchContent_MakeAvailable(ZLIB)
-
-# Help find_package(ZLIB) inside PoDoFo
-set(ZLIB_INCLUDE_DIR "${zlib_SOURCE_DIR}" CACHE PATH "")
-set(ZLIB_LIBRARY zlibstatic CACHE STRING "")
