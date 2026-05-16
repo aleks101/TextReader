@@ -20,7 +20,7 @@
 #define WINDOW_WIDTH 1280
 #define WINDOW_HEIGHT 720
 
-int WPM = 60;
+int WPM = 150;
 int charIndex = 0;
 bool pause = false;
 bool fileSelection = false;
@@ -28,7 +28,7 @@ bool fileSelected = false;
 std::string filePath;
 std::string text;
 std::string currentWord = "sample";
-std::string WPMtext = "60";
+std::string WPMtext = "150";
 
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
@@ -43,7 +43,19 @@ void NextWord();
 void JumpForward(int words);
 void JumpBackwards(int words);
 
+void HideConsole()
+{
+    ::ShowWindow(::GetConsoleWindow(), SW_HIDE);
+}
+
+void ShowConsole()
+{
+    ::ShowWindow(::GetConsoleWindow(), SW_SHOW);
+}
+
 int main(){
+	HideConsole();
+	
     print("TextReader start point\n");
 
     GLFWwindow* window = init_opengl();
